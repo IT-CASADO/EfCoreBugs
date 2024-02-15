@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfCoreBugs", "EfCoreBugs\Ef
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfCoreBugsTest", "EfCoreBugsTest\EfCoreBugsTest.csproj", "{E656FC5F-7BBE-4123-8C26-4D97FB8E01F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bug33109", "ConsoleApp1\Bug33109.csproj", "{2B747454-7694-4081-B3B3-5FDB03AB69BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{E656FC5F-7BBE-4123-8C26-4D97FB8E01F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E656FC5F-7BBE-4123-8C26-4D97FB8E01F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E656FC5F-7BBE-4123-8C26-4D97FB8E01F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B747454-7694-4081-B3B3-5FDB03AB69BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B747454-7694-4081-B3B3-5FDB03AB69BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B747454-7694-4081-B3B3-5FDB03AB69BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B747454-7694-4081-B3B3-5FDB03AB69BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
