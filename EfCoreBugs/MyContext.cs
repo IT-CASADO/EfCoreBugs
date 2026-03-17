@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Evo.Common.Data.EntityFramework;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EfCoreBugs
 {
     public class MyContext : DbContext
     {
-        public DbSet<Blog> Blogs { get; set; }
-        public DbSet<Post> Posts { get; set; }
+        public DbSet<Item> Items { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -19,40 +20,15 @@ namespace EfCoreBugs
                 options =>
                 {
                     options.CommandTimeout(300);
-                    options.UseHierarchyId();
                 }
             );
+
+            optionsBuilder.ReplaceService<IValueConverterSelector, EvoValueConverterSelector>();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
-            //modelBuilder.ApplyConfiguration(new SomeEntityConfiguration());
+            modelBuilder.Entity<Item>().HasKey(e => e.Id);
         }
     }
-
-    //public class SomeEntityConfiguration : IEntityTypeConfiguration<SomeEntity>
-    //{
-    //    public void Configure(EntityTypeBuilder<SomeEntity> builder)
-    //    {
-    //        builder.HasKey(i => i.Id);
-
-    //        builder.Property(i => i.Name).IsRequired();
-
-    //        builder.OwnsOne<SomeField>(
-    //            "_fieldA",
-    //            b =>
-    //            {
-    //                b.Property("PropA").HasColumnName("FieldAPropA").IsRequired(true);
-
-    //                b.Property("PropB").HasColumnName("FieldAPropB").IsRequired(true);
-    //            }
-    //        );
-
-    //        builder.Navigation("_fieldA").IsRequired();
-
-    //        builder.ToTable("SomeEntity");
-    //    }
-    //}
 }

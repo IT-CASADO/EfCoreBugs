@@ -1,5 +1,8 @@
 using EfCoreBugs;
+using Evo.BusinessFramework;
 using FluentAssertions;
+using LinqToDB.Data;
+using LinqToDB.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EfCoreBugsTest
@@ -7,36 +10,38 @@ namespace EfCoreBugsTest
     public class UnitTest1
     {
         [Fact]
-        public void SplitQueryWithHierarchyIdFilter()
+        public async Task LinqToDB_BulkCopy_Error()
         {
             // arrange
             MigrateDatabase();
 
             var context = new MyContext();
-            var myBlog = new Blog() { Name = "MyBlog" };
+            await context.Items.ExecuteDeleteAsync();
 
-            myBlog.Posts.Add(new Post() { Title = "T1", Blog = myBlog });
-            myBlog.Posts.Add(new Post() { Title = "T2", Blog = myBlog });
-
-            context.Blogs.Add(myBlog);
-
-            context.SaveChanges();
+            var item1 = new Item() { Id = ItemId.Next(), Name = "Item 1" };
+            var children = Enumerable
+                .Range(2, 1)
+                .Select(i => new Item()
+                {
+                    Id = ItemId.Next(),
+                    Name = "Item " + i,
+                    ParentId = item1.Id,
+                });
 
             // act
 
-            var action = () =>
+
+            var action = async () =>
             {
-                HierarchyId[] nodeIdFilter = [HierarchyId.GetRoot()];
-                context
-                    .Blogs
-                    .Include(b => b.Posts)
-                    .Where(b => nodeIdFilter.Contains(b.NodeId))
-                    .AsSplitQuery()
-                    .ToList();
+                await using var connection = context.CreateLinqToDBConnection();
+                await connection.BulkCopyAsync(
+                    new BulkCopyOptions(CheckConstraints: true),
+                    [item1, .. children]
+                );
             };
 
             // assert
-            action.Should().NotThrow();
+            await action.Should().NotThrowAsync();
         }
 
         private void MigrateDatabase()
